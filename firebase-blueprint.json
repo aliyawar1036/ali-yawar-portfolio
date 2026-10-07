@@ -1,0 +1,113 @@
+{
+  "entities": {
+    "LeadInquiry": {
+      "title": "LeadInquiry",
+      "description": "A project inquiry submitted by a website visitor after signing in with Google.",
+      "type": "object",
+      "properties": {
+        "authorUid": {
+          "type": "string",
+          "description": "The authenticated Firebase UID of the person submitting the inquiry.",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "name": {
+          "type": "string",
+          "description": "Full name of the prospect.",
+          "minLength": 2,
+          "maxLength": 100
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "Contact email address of the prospect.",
+          "minLength": 5,
+          "maxLength": 120
+        },
+        "company": {
+          "type": "string",
+          "description": "Company or business name (optional, empty string if omitted).",
+          "minLength": 0,
+          "maxLength": 120
+        },
+        "projectType": {
+          "type": "string",
+          "description": "Selected automation project category.",
+          "enum": [
+            "AI Automation",
+            "AI Agent",
+            "n8n Workflow",
+            "Lead Generation",
+            "Sales Automation",
+            "Email Automation",
+            "Business Process Automation",
+            "API Integration",
+            "Other"
+          ],
+          "minLength": 2,
+          "maxLength": 60
+        },
+        "message": {
+          "type": "string",
+          "description": "Description of the manual workflow or repetitive process to automate.",
+          "minLength": 12,
+          "maxLength": 2000
+        },
+        "status": {
+          "type": "string",
+          "description": "Current lead review status.",
+          "enum": ["new", "contacted", "closed"],
+          "minLength": 3,
+          "maxLength": 20
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when the inquiry was created."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when the inquiry was last updated."
+        }
+      },
+      "required": [
+        "authorUid",
+        "name",
+        "email",
+        "company",
+        "projectType",
+        "message",
+        "status",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "AdminUser": {
+      "title": "AdminUser",
+      "description": "Trusted administrator account record.",
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "Verified administrator email.",
+          "minLength": 5,
+          "maxLength": 120
+        }
+      },
+      "required": ["email"]
+    }
+  },
+  "firestore": {
+    "/inquiries/{inquiryId}": {
+      "schema": { "$ref": "#/entities/LeadInquiry" },
+      "description": "Stores client automation inquiries submitted through the portfolio contact form."
+    },
+    "/admins/{adminUid}": {
+      "schema": { "$ref": "#/entities/AdminUser" },
+      "description": "Stores administrator UIDs authorized to manage all inquiries."
+    }
+  }
+}
